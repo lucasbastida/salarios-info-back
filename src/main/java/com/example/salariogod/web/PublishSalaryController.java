@@ -7,6 +7,7 @@ import com.example.salariogod.web.PublishSalaryRequest.PaymentRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +20,7 @@ public class PublishSalaryController {
 
     private final PublishSalaryService publishSalaryService;
 
+    @PostMapping("/v1/salary")
     public ResponseEntity<Void> publish(@RequestBody @Valid PublishSalaryRequest request) {
         final List<Salary> salaries = convert(request);
         publishSalaryService.publish(salaries);
