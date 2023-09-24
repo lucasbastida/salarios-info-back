@@ -24,6 +24,6 @@ public class Payment {
     @Column(nullable = false)
     private String currency;
 
-    @Column(nullable = false)
-    private boolean taxed;
+    @Column
+    private boolean gross;
 }

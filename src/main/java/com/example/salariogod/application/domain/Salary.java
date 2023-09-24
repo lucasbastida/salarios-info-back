@@ -30,6 +30,12 @@ public class Salary {
     @Column(nullable = false)
     private LocalDate paymentDate;
 
+    @Column(nullable = false)
+    private Contract contractType;
+
+    @Column(nullable = false)
+    private TechRole techRole;
+
     @Column
-    private String techPosition;
+    private String comment;
 }
