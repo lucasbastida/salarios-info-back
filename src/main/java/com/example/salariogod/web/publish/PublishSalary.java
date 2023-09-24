@@ -2,6 +2,7 @@ package com.example.salariogod.web.publish;
 
 import com.example.salariogod.application.domain.Payment;
 import com.example.salariogod.application.domain.Salary;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -17,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PublishSalary {
     @NotEmpty
-    private List<PublishPayment> payments;
+    private List<@Valid PublishPayment> payments;
     @NotNull
     private LocalDate paymentDate;
     @NotBlank
