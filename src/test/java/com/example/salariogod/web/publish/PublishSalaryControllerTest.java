@@ -1,5 +1,6 @@
 package com.example.salariogod.web.publish;
 
+import com.example.salariogod.application.domain.Contract;
 import com.example.salariogod.application.service.PublishSalaryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -71,7 +72,7 @@ class PublishSalaryControllerTest {
         payment.setAmount("2");
         payment.setCurrency("USD");
         salary.setPayments(List.of(payment));
-        salary.setContract("contract");
+        salary.setContract(Contract.STAFF);
         salary.setPaymentDate(LocalDate.now());
         request.setSalaries(List.of(salary));
 

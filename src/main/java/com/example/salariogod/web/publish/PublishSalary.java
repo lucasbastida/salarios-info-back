@@ -1,9 +1,9 @@
 package com.example.salariogod.web.publish;
 
+import com.example.salariogod.application.domain.Contract;
 import com.example.salariogod.application.domain.Payment;
 import com.example.salariogod.application.domain.Salary;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -21,8 +21,8 @@ public class PublishSalary {
     private List<@Valid PublishPayment> payments;
     @NotNull
     private LocalDate paymentDate;
-    @NotBlank
-    private String contract;
+    @NotNull
+    private Contract contract;
     private String techPosition;
 
     public Salary to() {
@@ -33,6 +33,7 @@ public class PublishSalary {
         return Salary.builder()
                 .paymentDate(this.paymentDate)
                 .payments(paymentList)
+                .contractType(contract)
                 .build();
     }
 }
