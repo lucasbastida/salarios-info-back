@@ -19,7 +19,7 @@ public class Salary {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Payment> payments;
 
     @Column(nullable = false)
@@ -31,9 +31,12 @@ public class Salary {
     @Column(nullable = false)
     private Contract contractType;
 
+    @Column
+    private String comment;
+
     @Column(nullable = false)
     private TechRole techRole;
 
-    @Column
-    private String comment;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "salary")
+    private OtherRole otherRole;
 }
