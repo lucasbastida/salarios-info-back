@@ -29,6 +29,7 @@ public class Salary {
     private LocalDate paymentDate;
 
     @Column(nullable = false)
+    @Enumerated(value = EnumType.ORDINAL)
     private Contract contractType;
 
     @Column
