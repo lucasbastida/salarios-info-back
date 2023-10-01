@@ -30,14 +30,14 @@ public class Salary {
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.ORDINAL)
-    private Contract contractType;
-
-    @Column
-    private String comment;
+    private Contract contract;
 
     @Column(nullable = false)
     private TechRole techRole;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "salary")
     private OtherRole otherRole;
+
+    @Column
+    private String comment;
 }

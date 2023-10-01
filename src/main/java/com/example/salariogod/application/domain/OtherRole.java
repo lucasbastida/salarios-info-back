@@ -12,6 +12,7 @@ import lombok.*;
 @Table(name = "other_role")
 public class OtherRole {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(nullable = false, length = 75)

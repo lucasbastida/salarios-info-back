@@ -15,7 +15,8 @@ import java.util.List;
 public class PublishRequest {
 
     @NotEmpty
-    private List<@Valid PublishSalary> salaries;
+    @Valid
+    private List<PublishSalary> salaries;
 
     public List<Salary> to() {
         return salaries.stream()
