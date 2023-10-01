@@ -1,0 +1,108 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="lb" id="1696194578854-1">
+        <createTable schemaName="public" tableName="salary">
+            <column name="contract" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tech_role" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_instant" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="salary_pkey"/>
+            </column>
+            <column name="comment" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lb" id="1696194578854-2">
+        <createTable schemaName="public" tableName="other_role">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="other_role_pkey"/>
+            </column>
+            <column name="salary_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(75)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lb" id="1696194578854-3">
+        <createTable schemaName="public" tableName="salary_payments">
+            <column name="payments_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="salary_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lb" id="1696194578854-4">
+        <addUniqueConstraint columnNames="salary_id" constraintName="other_role_salary_id_key" schemaName="public"
+                             tableName="other_role"/>
+    </changeSet>
+    <changeSet author="lb" id="1696194578854-5">
+        <addUniqueConstraint columnNames="payments_id" constraintName="salary_payments_payments_id_key"
+                             schemaName="public" tableName="salary_payments"/>
+    </changeSet>
+    <changeSet author="lb" id="1696194578854-6">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807"
+                        minValue="1" schemaName="public" sequenceName="other_role_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="lb" id="1696194578854-7">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807"
+                        minValue="1" schemaName="public" sequenceName="payment_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="lb" id="1696194578854-8">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807"
+                        minValue="1" schemaName="public" sequenceName="salary_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="lb" id="1696194578854-9">
+        <createTable schemaName="public" tableName="payment">
+            <column name="gross" type="BOOLEAN"/>
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="payment_pkey"/>
+            </column>
+            <column name="amount" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lb" id="1696194578854-10">
+        <createTable schemaName="public" tableName="test">
+            <column name="col" type="VARCHAR"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lb" id="1696194578854-11">
+        <addForeignKeyConstraint baseColumnNames="payments_id" baseTableName="salary_payments"
+                                 baseTableSchemaName="public" constraintName="fk1iuvgjj2hf04ay7guhfmnsg6s"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="payment"
+                                 referencedTableSchemaName="public" validate="true"/>
+    </changeSet>
+    <changeSet author="lb" id="1696194578854-12">
+        <addForeignKeyConstraint baseColumnNames="salary_id" baseTableName="other_role" baseTableSchemaName="public"
+                                 constraintName="fk5pwuv9qtpxq4ljnvothlk7few" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="salary"
+                                 referencedTableSchemaName="public" validate="true"/>
+    </changeSet>
+    <changeSet author="lb" id="1696194578854-13">
+        <addForeignKeyConstraint baseColumnNames="salary_id" baseTableName="salary_payments"
+                                 baseTableSchemaName="public" constraintName="fktitmvwytxxq2pvyaf7p1sdeyl"
+                                 deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="salary"
+                                 referencedTableSchemaName="public" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
