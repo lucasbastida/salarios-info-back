@@ -24,7 +24,7 @@ public class RecaptchaResponse {
     @JsonAlias("error-codes")
     private String errorCodes;
 
-    public boolean isInvalid(Double minScore) {
-        return !this.success || score < minScore;
+    public boolean failed(Double minScore) {
+        return !this.success || score == null || score < minScore;
     }
 }

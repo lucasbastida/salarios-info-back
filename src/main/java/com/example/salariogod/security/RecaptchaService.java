@@ -41,7 +41,7 @@ public class RecaptchaService {
             throw new IllegalStateException("recaptcha response body is null");
         }
 
-        if (body.isInvalid(this.minScore)) {
+        if (body.failed(this.minScore)) {
             log.info("Invalid recaptcha token: {} error-codes: {} score: {}", token, body.getErrorCodes(), body.getScore());
             return false;
         }
