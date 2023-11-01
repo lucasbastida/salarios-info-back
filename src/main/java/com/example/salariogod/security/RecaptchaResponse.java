@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,7 +23,7 @@ public class RecaptchaResponse {
     private ZonedDateTime challengeTimestamp;
     private String hostname;
     @JsonAlias("error-codes")
-    private String errorCodes;
+    private List<String> errorCodes;
 
     public boolean failed(Double minScore) {
         return !this.success || score == null || score < minScore;

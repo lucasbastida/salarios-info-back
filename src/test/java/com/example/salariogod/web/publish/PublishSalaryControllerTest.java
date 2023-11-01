@@ -3,12 +3,14 @@ package com.example.salariogod.web.publish;
 import com.example.salariogod.application.domain.Contract;
 import com.example.salariogod.application.domain.TechRole;
 import com.example.salariogod.application.service.PublishSalaryService;
+import com.example.salariogod.security.SecurityConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -22,6 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PublishSalaryController.class)
+@Import(SecurityConfig.class)
 class PublishSalaryControllerTest {
 
     private static final String URL = "/v1/salary";
@@ -38,7 +41,8 @@ class PublishSalaryControllerTest {
     @DisplayName("when request is invalid then return 400 Bad Request")
     @Test
     void badRequestTest() throws Exception {
-        mockMvc.perform(post(URL)).andExpect(status().isBadRequest());
+        mockMvc.perform(post(URL))
+                .andExpect(status().isBadRequest());
     }
 
     @DisplayName("when publish salary service fails then raise exception")

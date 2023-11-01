@@ -15,7 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Constraint(validatedBy = PublishSalaryValidator.class)
 public @interface ValidPublishSalary {
-    String message() default "techRole must be empty when not OTHER";
+    String message() default "otherRole must be empty when techRole is not OTHER";
 
     Class<?>[] groups() default {};
 
