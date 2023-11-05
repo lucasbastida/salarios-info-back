@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -15,12 +16,12 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class RecaptchaResponse {
-    private boolean success;
+    private Boolean success;
     private Double score;
     private String action;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZZ")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     @JsonAlias("challenge_ts")
-    private ZonedDateTime challengeTimestamp;
+    private Instant challengeTimestamp;
     private String hostname;
     @JsonAlias("error-codes")
     private List<String> errorCodes;
