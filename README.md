@@ -31,7 +31,7 @@ Run `./mvnw clean verify` from the command line.
 
 ![infrastructure diagram][infrastructure-diagram]
 
-[infrastructure-diagram]:https://github.com/lucasbastida/salarios-info-back/raw/docs/aws-infra.png "infrastructure diagram"
+[infrastructure-diagram]:https://github.com/lucasbastida/salarios-info-back/raw/main/docs/aws-infra.png "infrastructure diagram"
 
 ## Built with
 
