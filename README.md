@@ -27,6 +27,12 @@ Run `./mvnw clean verify` from the command line.
 
 ## Architecture
 
+### Infrastructure diagram
+
+![infrastructure diagram][infrastructure-diagram]
+
+[infrastructure-diagram]:https://github.com/lucasbastida/salarios-info-back/raw/docs/aws-infra.png "infrastructure diagram"
+
 ## Built with
 
 * [Spring Boot](https://projects.spring.io/spring-boot/) and starters: Spring Web MVC, Spring Data JPA, Spring
