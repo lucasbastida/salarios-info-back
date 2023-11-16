@@ -23,7 +23,9 @@ public class SecurityConfig {
         httpSecurity.
                 csrf(AbstractHttpConfigurer::disable).
                 authorizeHttpRequests(authorize ->
-                        authorize.requestMatchers("/actuator/**")
+                        authorize.requestMatchers("/actuator/health")
+                                .permitAll()
+                                .requestMatchers("/actuator/**")
                                 .authenticated()
                                 .anyRequest()
                                 .permitAll())
