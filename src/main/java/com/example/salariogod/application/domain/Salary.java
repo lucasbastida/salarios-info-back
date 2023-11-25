@@ -35,8 +35,9 @@ public class Salary {
     @Column(nullable = false)
     private TechRole techRole;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "salary")
-    private OtherRole otherRole;
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "salary_id")
+    private List<OtherRole> otherRole;
 
     @Column
     private String comment;

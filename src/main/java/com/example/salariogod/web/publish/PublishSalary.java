@@ -46,8 +46,7 @@ public class PublishSalary {
         if (TechRole.OTHER.equals(this.techRole) && StringUtils.hasText(this.otherRole)) {
             final OtherRole other = new OtherRole();
             other.setName(this.otherRole);
-            other.setSalary(salary);
-            salary.setOtherRole(other);
+            salary.setOtherRole(List.of(other));
         }
 
         return salary;

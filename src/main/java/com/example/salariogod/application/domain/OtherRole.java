@@ -17,8 +17,4 @@ public class OtherRole {
 
     @Column(nullable = false, length = 75)
     private String name;
-
-    @OneToOne
-    @JoinColumn(name = "salary_id", nullable = false)
-    private Salary salary;
 }

@@ -111,8 +111,7 @@ class PublishSalaryTest {
             if (StringUtils.hasText(otherRole)) {
                 final OtherRole other = new OtherRole();
                 other.setName(otherRole);
-                other.setSalary(expected);
-                expected.setOtherRole(other);
+                expected.setOtherRole(List.of(other));
             }
 
             return expected;

@@ -13,13 +13,13 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 @Testcontainers
 class SalariogodApplicationTests {
 
-	@Container
-	@ServiceConnection
-	static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-bookworm");
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-bookworm");
 
-	@Test
-	void contextLoads() {
-		assertThatCode(() -> {
-		}).doesNotThrowAnyException();
-	}
+    @Test
+    void contextLoads() {
+        assertThatCode(() -> {
+        }).doesNotThrowAnyException();
+    }
 }
