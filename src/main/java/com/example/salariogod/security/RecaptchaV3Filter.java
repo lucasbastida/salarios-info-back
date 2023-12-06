@@ -22,11 +22,9 @@ public class RecaptchaV3Filter extends OncePerRequestFilter {
     protected void doFilterInternal(@Nonnull HttpServletRequest request,
                                     @Nonnull HttpServletResponse response,
                                     @Nonnull FilterChain filterChain) throws ServletException, IOException {
-        if (request.getMethod().equals("POST")) {
-            final String token = request.getHeader("recaptcha");
-            if (!recaptchaService.valid(token)) {
-                throw new BadCredentialsException("invalid recaptcha");
-            }
+        final String token = request.getHeader("recaptcha");
+        if (!recaptchaService.valid(token)) {
+            throw new BadCredentialsException("invalid recaptcha");
         }
         filterChain.doFilter(request, response);
     }
