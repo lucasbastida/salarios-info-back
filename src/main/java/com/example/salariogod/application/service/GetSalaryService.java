@@ -26,7 +26,7 @@ public class GetSalaryService {
         if (getSalaryQuery.getTechRole() != null) {
             return salaryRepository.findByTechRole(getSalaryQuery.getTechRole(), pageRequest);
         } else {
-            return salaryRepository.findAll(pageRequest);
+            return salaryRepository.findAllFetchPayments(pageRequest);
         }
     }
 }

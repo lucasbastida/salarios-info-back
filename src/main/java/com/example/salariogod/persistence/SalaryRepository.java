@@ -12,4 +12,6 @@ public interface SalaryRepository extends JpaRepository<Salary, Long> {
     @Query("from Salary s join fetch s.payments where s.techRole = :techRole")
     Page<Salary> findByTechRole(TechRole techRole, Pageable pageable);
 
+    @Query("from Salary s join fetch s.payments")
+    Page<Salary> findAllFetchPayments(Pageable pageable);
 }
