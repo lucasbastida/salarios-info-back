@@ -1,8 +1,9 @@
 package com.example.salariogod.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -18,25 +19,48 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain publicFilterChain(HttpSecurity httpSecurity,
-                                                 @Autowired(required = false) RecaptchaService recaptchaService) throws Exception {
-        httpSecurity.
-                csrf(AbstractHttpConfigurer::disable).
-                authorizeHttpRequests(authorize ->
-                        authorize.requestMatchers("/actuator/health")
-                                .permitAll()
-                                .requestMatchers("/actuator/**")
-                                .authenticated()
-                                .anyRequest()
-                                .permitAll())
+    @Order(1)
+    public SecurityFilterChain actuatorFilterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
+                .securityMatchers(requestMatcherConfigurer -> requestMatcherConfigurer.
+                        requestMatchers("/actuator/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**"))
+                .authorizeHttpRequests(registry -> registry
+                        .requestMatchers("/actuator/health")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
                 .httpBasic(Customizer.withDefaults())
-                .cors(Customizer.withDefaults());
+                .cors(Customizer.withDefaults())
+                .build();
+    }
 
-        if (recaptchaService != null) {
-            httpSecurity.addFilterBefore(new RecaptchaV3Filter(recaptchaService), UsernamePasswordAuthenticationFilter.class);
-        }
+    @Bean
+    @Order(2)
+    @ConditionalOnProperty(name = "app-recaptcha.enabled", havingValue = "true")
+    public SecurityFilterChain recaptcha(HttpSecurity httpSecurity, RecaptchaService recaptchaService) throws Exception {
+        return httpSecurity.
+                csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest()
+                        .permitAll())
+                .httpBasic(Customizer.withDefaults())
+                .cors(Customizer.withDefaults())
+                .addFilterBefore(new RecaptchaV3Filter(recaptchaService), UsernamePasswordAuthenticationFilter.class)
+                .build();
+    }
 
-        return httpSecurity.build();
+    @Bean
+    @Order(3)
+    public SecurityFilterChain noRecaptcha(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity.
+                csrf(AbstractHttpConfigurer::disable).
+                authorizeHttpRequests(authorize -> authorize
+                        .anyRequest()
+                        .permitAll())
+                .httpBasic(Customizer.withDefaults())
+                .cors(Customizer.withDefaults())
+                .build();
     }
 
     @Bean
