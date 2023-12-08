@@ -10,21 +10,25 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GetSalaryService {
 
     private final SalaryRepository salaryRepository;
-    private final Integer pageSize;
+    private final Integer maxPageSize;
 
     public GetSalaryService(SalaryRepository salaryRepository,
-                            @Value("${app.get-salary-page-size: 25}") Integer pageSize) {
+                            @Value("${app.get-salary-page-size: 25}") Integer maxPageSize) {
         this.salaryRepository = salaryRepository;
-        this.pageSize = pageSize;
+        this.maxPageSize = maxPageSize;
     }
 
     public Page<Salary> getSalary(GetSalaryQuery getSalaryQuery) {
-        final PageRequest pageRequest = PageRequest.of(getSalaryQuery.getPage(), pageSize, Sort.by(Sort.Direction.DESC, "creationInstant"));
+        final Integer size = Optional.ofNullable(getSalaryQuery.getSize()).orElse(maxPageSize);
+        final int pageRequestSize = size <= this.maxPageSize ? size : this.maxPageSize;
+
+        final PageRequest pageRequest = PageRequest.of(getSalaryQuery.getPage(), pageRequestSize, Sort.by(Sort.Direction.DESC, "creationInstant"));
 
         Page<Long> salaryIds;
         if (getSalaryQuery.getTechRole() != null) {
@@ -36,6 +40,6 @@ public class GetSalaryService {
         final List<Long> content = salaryIds.getContent();
         final List<Salary> salaries = salaryRepository.findByIdInOrderByCreationInstant(content);
 
-        return new PageImpl<>(salaries, PageRequest.of(getSalaryQuery.getPage(), pageSize), salaries.size());
+        return new PageImpl<>(salaries, PageRequest.of(getSalaryQuery.getPage(), maxPageSize), salaryIds.getTotalElements());
     }
 }

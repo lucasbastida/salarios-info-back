@@ -8,5 +8,6 @@ import lombok.Getter;
 @Getter
 public class GetSalaryQuery {
     private int page;
+    private Integer size;
     private TechRole techRole;
 }

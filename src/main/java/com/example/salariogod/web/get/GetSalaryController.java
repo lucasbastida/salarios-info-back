@@ -7,6 +7,7 @@ import com.example.salariogod.application.service.GetSalaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,15 +23,17 @@ public class GetSalaryController {
 
     @GetMapping("/v1/salaries")
     public PagedModel<SalaryResponse> getSalaries(@RequestParam(name = "page", required = false, defaultValue = "0") int page,
+                                                  @RequestParam(name = "size", required = false) Integer size,
                                                   @RequestParam(name = "techRole", required = false) TechRole techRole) {
 
         final GetSalaryQuery query = GetSalaryQuery.builder()
                 .page(page)
+                .size(size)
                 .techRole(techRole)
                 .build();
 
         final Page<Salary> salary = getSalaryService.getSalary(query);
 
-        return salaryPagedResourcesAssembler.toModel(salary, salaryResponseAssembler);
+        return salaryPagedResourcesAssembler.toModel(salary, salaryResponseAssembler, Link.of("/salaries{?techRole,page,size}").expand(techRole, page, size));
     }
 }

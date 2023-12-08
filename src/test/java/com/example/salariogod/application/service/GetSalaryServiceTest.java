@@ -76,7 +76,7 @@ class GetSalaryServiceTest {
 
     @Test
     void getSalary_whenQueryHasTechRole_then_searchByTechRole() {
-        GetSalaryQuery query = new GetSalaryQuery(1, TechRole.BACKEND);
+        GetSalaryQuery query = new GetSalaryQuery(1, 25, TechRole.BACKEND);
 
         final List<Long> ids = List.of(1L);
         final PageImpl<Long> pagedIdsMock = new PageImpl<>(ids, PageRequest.of(0, 25), ids.size());
@@ -102,7 +102,7 @@ class GetSalaryServiceTest {
 
     @Test
     void getSalary_whenQueryOnlyHasPage_then_searchAll() {
-        GetSalaryQuery query = new GetSalaryQuery(1, null);
+        GetSalaryQuery query = new GetSalaryQuery(1, 25, null);
 
         final List<Long> ids = List.of(1L);
         final PageImpl<Long> pagedIdsMock = new PageImpl<>(ids, PageRequest.of(0, 25), ids.size());
