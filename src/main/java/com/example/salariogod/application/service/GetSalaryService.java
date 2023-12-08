@@ -40,6 +40,6 @@ public class GetSalaryService {
         final List<Long> content = salaryIds.getContent();
         final List<Salary> salaries = salaryRepository.findByIdInOrderByCreationInstant(content);
 
-        return new PageImpl<>(salaries, PageRequest.of(getSalaryQuery.getPage(), maxPageSize), salaryIds.getTotalElements());
+        return new PageImpl<>(salaries, PageRequest.of(getSalaryQuery.getPage(), pageRequestSize), salaryIds.getTotalElements());
     }
 }
