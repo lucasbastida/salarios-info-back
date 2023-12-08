@@ -7,11 +7,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface SalaryRepository extends JpaRepository<Salary, Long> {
 
-    @Query("from Salary s join fetch s.payments where s.techRole = :techRole")
-    Page<Salary> findByTechRole(TechRole techRole, Pageable pageable);
+    @Query("select s.id from Salary s where s.techRole = :techRole")
+    Page<Long> findSalaryIdsByTechRole(TechRole techRole, Pageable pageable);
 
-    @Query("from Salary s join fetch s.payments")
-    Page<Salary> findAllFetchPayments(Pageable pageable);
+    @Query("select s.id from Salary s")
+    Page<Long> findAllSalaryIds(Pageable pageable);
+
+    @Query("from Salary s join fetch s.payments where s.id in :salaryIds")
+    List<Salary> findByIdInOrderByCreationInstant(List<Long> salaryIds);
 }

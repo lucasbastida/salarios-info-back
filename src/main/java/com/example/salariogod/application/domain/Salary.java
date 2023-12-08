@@ -14,9 +14,11 @@ import java.util.List;
 @NoArgsConstructor
 @Table
 @Entity
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Salary {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @OneToMany(cascade = CascadeType.PERSIST)

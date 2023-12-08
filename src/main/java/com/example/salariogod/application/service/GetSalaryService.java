@@ -4,9 +4,12 @@ import com.example.salariogod.application.domain.Salary;
 import com.example.salariogod.persistence.SalaryRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class GetSalaryService {
@@ -23,10 +26,16 @@ public class GetSalaryService {
     public Page<Salary> getSalary(GetSalaryQuery getSalaryQuery) {
         final PageRequest pageRequest = PageRequest.of(getSalaryQuery.getPage(), pageSize, Sort.by(Sort.Direction.DESC, "creationInstant"));
 
+        Page<Long> salaryIds;
         if (getSalaryQuery.getTechRole() != null) {
-            return salaryRepository.findByTechRole(getSalaryQuery.getTechRole(), pageRequest);
+            salaryIds = salaryRepository.findSalaryIdsByTechRole(getSalaryQuery.getTechRole(), pageRequest);
         } else {
-            return salaryRepository.findAllFetchPayments(pageRequest);
+            salaryIds = salaryRepository.findAllSalaryIds(pageRequest);
         }
+
+        final List<Long> content = salaryIds.getContent();
+        final List<Salary> salaries = salaryRepository.findByIdInOrderByCreationInstant(content);
+
+        return new PageImpl<>(salaries, PageRequest.of(getSalaryQuery.getPage(), pageSize), salaries.size());
     }
 }

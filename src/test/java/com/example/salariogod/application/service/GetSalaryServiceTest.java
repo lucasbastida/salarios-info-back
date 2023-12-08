@@ -54,9 +54,22 @@ class GetSalaryServiceTest {
 
     @ParameterizedTest
     @MethodSource("validQueries")
-    void getSalary_raisesExceptionWhenRepositoryFails(GetSalaryQuery query) {
-        lenient().when(salaryRepository.findByTechRole(any(), any())).thenThrow(RuntimeException.class);
-        lenient().when(salaryRepository.findAllFetchPayments(any(PageRequest.class))).thenThrow(RuntimeException.class);
+    void getSalary_raisesExceptionWhenRepositoryFailsFindingIds(GetSalaryQuery query) {
+        lenient().when(salaryRepository.findSalaryIdsByTechRole(any(), any())).thenThrow(RuntimeException.class);
+        lenient().when(salaryRepository.findAllSalaryIds(any(PageRequest.class))).thenThrow(RuntimeException.class);
+
+        assertThatThrownBy(() -> sut.getSalary(query)).isInstanceOf(RuntimeException.class);
+    }
+
+    @ParameterizedTest
+    @MethodSource("validQueries")
+    void getSalary_raisesExceptionWhenRepositoryFailsFindingSalaries(GetSalaryQuery query) {
+        final List<Long> ids = List.of(1L);
+        final PageImpl<Long> pagedIdsMock = new PageImpl<>(ids, PageRequest.of(0, 25), ids.size());
+
+        lenient().when(salaryRepository.findSalaryIdsByTechRole(any(), any())).thenReturn(pagedIdsMock);
+        lenient().when(salaryRepository.findAllSalaryIds(any(PageRequest.class))).thenReturn(pagedIdsMock);
+        when(salaryRepository.findByIdInOrderByCreationInstant(ids)).thenThrow(RuntimeException.class);
 
         assertThatThrownBy(() -> sut.getSalary(query)).isInstanceOf(RuntimeException.class);
     }
@@ -65,16 +78,20 @@ class GetSalaryServiceTest {
     void getSalary_whenQueryHasTechRole_then_searchByTechRole() {
         GetSalaryQuery query = new GetSalaryQuery(1, TechRole.BACKEND);
 
-        Page<Salary> expectedPage = new PageImpl<>(List.of(new Salary()));
+        final List<Long> ids = List.of(1L);
+        final PageImpl<Long> pagedIdsMock = new PageImpl<>(ids, PageRequest.of(0, 25), ids.size());
 
-        when(salaryRepository.findByTechRole(eq(TechRole.BACKEND), any())).thenReturn(expectedPage);
+        Page<Salary> expectedPage = new PageImpl<>(List.of(new Salary()), PageRequest.of(1, 25), 1);
+
+        when(salaryRepository.findSalaryIdsByTechRole(eq(TechRole.BACKEND), any())).thenReturn(pagedIdsMock);
+        when(salaryRepository.findByIdInOrderByCreationInstant(ids)).thenReturn(List.of(new Salary()));
 
         Page<Salary> result = sut.getSalary(query);
 
         assertEquals(expectedPage, result);
 
-        verify(salaryRepository, times(1)).findByTechRole(eq(TechRole.BACKEND), pageRequestArgumentCaptor.capture());
-        verify(salaryRepository, never()).findAllFetchPayments(any(PageRequest.class));
+        verify(salaryRepository, times(1)).findSalaryIdsByTechRole(eq(TechRole.BACKEND), pageRequestArgumentCaptor.capture());
+        verify(salaryRepository, never()).findAllSalaryIds(any(PageRequest.class));
 
         final PageRequest pageRequest = pageRequestArgumentCaptor.getValue();
         assertThat(pageRequest.getPageSize()).isEqualTo(PAGE_SIZE);
@@ -87,16 +104,20 @@ class GetSalaryServiceTest {
     void getSalary_whenQueryOnlyHasPage_then_searchAll() {
         GetSalaryQuery query = new GetSalaryQuery(1, null);
 
-        Page<Salary> expectedPage = new PageImpl<>(List.of(new Salary()));
+        final List<Long> ids = List.of(1L);
+        final PageImpl<Long> pagedIdsMock = new PageImpl<>(ids, PageRequest.of(0, 25), ids.size());
 
-        when(salaryRepository.findAllFetchPayments(any(PageRequest.class))).thenReturn(expectedPage);
+        Page<Salary> expectedPage = new PageImpl<>(List.of(new Salary()), PageRequest.of(1, 25), 1);
+
+        when(salaryRepository.findAllSalaryIds(any(PageRequest.class))).thenReturn(pagedIdsMock);
+        when(salaryRepository.findByIdInOrderByCreationInstant(ids)).thenReturn(List.of(new Salary()));
 
         Page<Salary> result = sut.getSalary(query);
 
         assertEquals(expectedPage, result);
 
-        verify(salaryRepository, never()).findByTechRole(eq(TechRole.BACKEND), any());
-        verify(salaryRepository, times(1)).findAllFetchPayments(pageRequestArgumentCaptor.capture());
+        verify(salaryRepository, never()).findSalaryIdsByTechRole(eq(TechRole.BACKEND), any());
+        verify(salaryRepository, times(1)).findAllSalaryIds(pageRequestArgumentCaptor.capture());
 
         final PageRequest pageRequest = pageRequestArgumentCaptor.getValue();
         assertThat(pageRequest.getPageSize()).isEqualTo(PAGE_SIZE);

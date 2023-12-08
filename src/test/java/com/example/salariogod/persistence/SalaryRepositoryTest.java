@@ -1,6 +1,5 @@
 package com.example.salariogod.persistence;
 
-import com.example.salariogod.application.domain.Salary;
 import com.example.salariogod.application.domain.TechRole;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ class SalaryRepositoryTest {
     @Test
     void test() {
         final PageRequest pageRequest = PageRequest.of(0, 25);
-        final Page<Salary> byTechRole = sut.findByTechRole(TechRole.BACKEND, pageRequest);
+        final Page<Long> byTechRole = sut.findSalaryIdsByTechRole(TechRole.BACKEND, pageRequest);
 
         assertThat(byTechRole.getTotalElements()).isZero();
     }
